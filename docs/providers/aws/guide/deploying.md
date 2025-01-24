@@ -1,7 +1,16 @@
 <!--
 title: Serverless Framework - Deploying to AWS
 description: How to deploy your AWS Lambda functions and their required infrastructure
-layout: Doc
+short_title: Deploying to AWS
+keywords:
+  [
+    'Serverless Framework',
+    'AWS',
+    'deploying',
+    'Lambda functions',
+    'cloud infrastructure',
+    'CloudFormation',
+  ]
 -->
 
 <!-- DOCS-SITE-LINK:START automatically generated  -->
@@ -42,18 +51,18 @@ The Serverless Framework translates all syntax in `serverless.yml` to a single A
 - The CloudFormation Stack is updated with the new CloudFormation template.
 - Each deployment publishes a new version for each function in your service.
 
+**Note:** AWS SSM and S3 permissions are required for deployments to manage state and upload deployment packages. For more details, see [AWS Credentials Requirement for Packaging](./packaging.md#aws-credentials-requirement-for-packaging).
+
 ### Deployment method
 
-Since Serverless Framework v3, deployments are done using [CloudFormation change sets](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-changesets.html). It is possible to use [CloudFormation direct deployments](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-direct.html) instead.
+Since Serverless Framework v4, deployments are by default done using [CloudFormation direct deployments](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-direct.html). This is the recommended approach for most users.
 
-Direct deployments **are faster** and have no downsides (unless you specifically use the generated change sets). They will become the default in Serverless Framework 4.
-
-You are encouraged to enable direct deployments via the `deploymentMethod` option:
+If you want to instead use [CloudFormation change sets](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-changesets.html), you can enable it via the `deploymentMethod` option:
 
 ```
 provider:
   name: aws
-  deploymentMethod: direct
+  deploymentMethod: changesets
 ```
 
 ### Tips

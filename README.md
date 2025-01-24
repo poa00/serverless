@@ -1,4 +1,4 @@
-[![Serverless Framework AWS Lambda AWS DynamoDB AWS API Gateway](https://github.com/serverless/serverless/assets/2752551/b20dd7e5-0380-492f-9cf2-5fd87a145ebb)](https://serverless.com)
+[![Serverless Framework AWS Lambda AWS DynamoDB AWS API Gateway](https://github.com/serverless/serverless/assets/2752551/66a8c6a9-bc4a-4116-b139-90c12963337e)](https://serverless.com)
 
 <br/>
 
@@ -9,7 +9,7 @@
   &nbsp;•&nbsp;
   <a aria-label="Serverless Inc Twitter" href="https://twitter.com/goserverless">X / Twitter</a>
   &nbsp;•&nbsp;
-  <a aria-label="Serverless Framework Community Slack" href="https://join.slack.com/t/serverless-contrib/shared_invite/zt-2jpqamlep-SRbvbcFGDXmpEXErcL4WWQ">Community Slack</a>
+  <a aria-label="Serverless Framework Community Slack" href="https://serverless.com/slack">Community Slack</a>
   &nbsp;•&nbsp;
   <a aria-label="Serverless Framework Community Forum" href="https://forum.serverless.com">Forum</a>
 </div>
@@ -17,7 +17,7 @@
 <br/>
 <br/>
 
-**The Serverless Framework** – Makes it easy to use AWS Lambda and other managed cloud services to build applications that auto-scale, cost nothing when idle, and boast radically low maintenance.
+**The Serverless Framework** – Makes it easy to use AWS Lambda and other managed cloud services to build applications that auto-scale, cost nothing when idle, and overall result in radically low maintenance.
 
 The Serverless Framework is a command-line tool with approachable YAML syntax to deploy both your code and cloud infrastructure needed to make tons of serverless application use-cases, like APIs, front-ends, data pipelines and scheduled tasks. It's a multi-language framework that supports Node.js, Typescript, Python, Go, Java, and more. It's also completely extensible via over 1,000 plugins which add more serverless use-cases and workflows to the Framework.
 
@@ -25,26 +25,36 @@ Actively maintained by [Serverless Inc](https://www.serverless.com).
 
 <br/>
 
-# Serverless Framework - V.4 - Beta
+# Serverless Framework - V.4
 
-**May 21st, 2024** – We've released Serverless Framework V.4 Beta after testing the V.4 Alpha for a few months. In this release, we assumed the `serverless` npm namespace. To continue to use Serverless Framework V.3 and older versions, please target them in your NPM installs (e.g. `npm i serverless@3.38.0` `3.38.0` is the latest version of `v3`), and double-check your automated deployments are doing the same.
+<div align="center" style="max-width: 500px; margin: auto;">
+  <a href="https://www.youtube.com/watch?v=UQL_PPJUFOU" target="_blank">
+    <img src="https://github.com/serverless/serverless/assets/2752551/2fc23656-df76-4d8a-b775-f4cc8ed2068d" alt="Serverless Framework V.4 Overview Video" style="width: 100%; max-width: 500px;">
+  </a>
+</div>
 
-If you need to access documentation for Serverless Framework V.3, you can find it [here](https://github.com/serverless/serverless/tree/v3/docs).
+<br/>
 
-If you are upgrading to V.4, see our [Upgrading to Serverless Framework V4 Documentation](https://www.serverless.com/framework/docs/guides/upgrading-v4).
+**September 24th, 2024** – We have introduced a ton of new features since the release of Serverless Framework V4 GA in May. Check out the list below for everything recently launched. If you are upgrading to V.4, see our [Upgrading to Serverless Framework V4 Documentation](https://www.serverless.com/framework/docs/guides/upgrading-v4). If you need to access documentation for Serverless Framework V.3, you can find it [here](https://github.com/serverless/serverless/tree/v3/docs).
 
 ## New Features In V.4
 
 Here's a list of everything that's new in V.4, so far:
 
+- **Support for AWS SAM, AWS Cloudformation, & Traditional Serverless Framework Projects:** Now, you can use one tool to deploy all three of these IaC project files. [More info here](https://www.serverless.com/framework/docs/guides/sam)
 - **Native Typescript Support:** You can now use `.ts` handlers in your AWS Lambda functions in `serverless.yml` and have them build automatically upon deploy. [ESBuild](https://esbuild.github.io/) is now included in the Framework which makes this possible. [More info here](https://www.serverless.com/framework/docs/providers/aws/guide/building).
+- **The AWS AI Stack:** V.4 is optimized for [the AWS AI Stack](https://github.com/serverless/aws-ai-stack). Deploy a full-stack, serverless, boilerplate for AI applications on AWS, featuring Bedrock LLMs like Claude 3.5 Sonnet and Llama3.1 and much more.
 - **New Dev Mode:** Run `serverless dev` to have events from your live architecture routed to your local code, enabling you to make fast changes without deployment. [More info here](https://www.serverless.com/framework/docs/providers/aws/cli-reference/dev).
-- **New AWS Lambda Runtimes:** "python3.12", "dotnet8", and "java21".
-- **Support Command:** Send support requests to our team directly from the CLI, which auto-include contextual info which you can review before sending.
+- - **Node.js V22:** Support for Node.js version 22 on AWS Lambda.
+- **New Stages Property:** Easily organize stage-specific config via `stages` and set `default` config to fallback to.
+- **Improved Compose Experience:** Serverless Compose now has a beautiful new CLI experience that better demonstrates what is being deployed.
+- **New Terraform & Vault Integrations:** Pull state outputs from several Terraform state storage solutions, and secrets from Vault. [Terraform Docs](https://www.serverless.com/framework/docs/guides/variables/terraform) [Vault Docs](https://www.serverless.com/framework/docs/guides/variables/vault)
+- **Support Command:** Send support requests to our team [directly from the CLI](https://www.serverless.com/framework/docs/providers/aws/cli-reference/support), which auto-include contextual info which you can review before sending.
 - **Debug Summary for AI:** When you run into a bug, you can run "serverless support --ai" to generate a concise report detailing your last bug with all necessary context, optimized for pasting into AI tools such as ChatGPT.
+- **New AWS Lambda Runtimes:** "python3.12", "dotnet8", and "java21".
 - **Advanced Logging Controls for AWS Lambda:** Capture Logs in JSON, increased log granularity, and setting a custom Log Group. Here is the [AWS article](https://aws.amazon.com/blogs/compute/introducing-advanced-logging-controls-for-aws-lambda-functions/). Here is the [YAML implementation](https://github.com/serverless/serverless/blob/v4.0/docs/providers/aws/guide/serverless.yml.md#logs)
+- **Axiom Integration:** Integrate with [Axiom's observability solution](https://www.serverless.com/framework/docs/guides/observability/axiom) for a powerful logging, metrics and traces experience, at 3X less than AWS cloudwatch.
 - **AWS SSO:** Environment variables, especially ones set by AWS SSO, are prioritized. The Framework and Dashboard no longer interfere with these.
-- **Build Plugins Run First:** [Build plugins now run first](https://github.com/serverless/serverless/issues?q=build+plugin), if they include the optional tags static property containing a `"build"` tag run first.
 - **Automatic Updates:** These happen by default now. Though, you will be able to control the level of updates you're open to.
 - **Improved Onboarding & Set-Up:** The `serverless` command has been re-written to be more helpful when setting up a new or existing project.
 - **Updated Custom Resource Handlers:** All custom resource handlers now use `nodejs20.x`.
@@ -62,7 +72,7 @@ If you stumble upon additional breaking changes, please create an issue. To lear
 
 ## License Changes in V.4
 
-Please note, the structure and licensing of the V.4 Beta repository differ from the V.4 Beta npm module. The npm module contains additional proprietary licensed software, as V.4 transitions to a common SaaS product, [as previously announced](https://www.serverless.com/blog/serverless-framework-v4-a-new-model). While the original Serverless Framework source code and more will continue to remain MIT license software, the repository will soon be restructured to clearly distinguish between proprietary and open-source components.
+Please note, the structure and licensing of the V.4 repository differ from the V.4 npm module. The npm module contains some proprietary licensed software, as V.4 transitions to a common SaaS product, [as previously announced](https://www.serverless.com/blog/serverless-framework-v4-a-new-model). The original Serverless Framework source code and more will continue to remain MIT license software, the repository will soon be restructured to clearly distinguish between proprietary and open-source components.
 
 <br/>
 
@@ -100,7 +110,7 @@ Here's how to install the Serverless Framework, set up a project and deploy it t
 
 ## Install the Serverless Framework via NPM
 
-First, you must have the [Node.js runtime](https://nodejs.org) installed, then you can install the Serverless Framework via NPM.
+First, you must have the [Node.js runtime](https://nodejs.org) installed, version 18.20.3 or greater, then you can install the Serverless Framework via NPM.
 
 Open your CLI and run the command below to install the Serverless Framework globally.
 
@@ -518,3 +528,9 @@ Here are some helpful resources for continuing with the Serverless Framework:
 - [Stackoverflow](http://stackoverflow.com/questions/tagged/serverless-framework)
 - [Facebook](https://www.facebook.com/serverless)
 - [Contact Us](mailto:hello@serverless.com)
+
+## Security and Bug Disclosure
+
+We take security seriously. If you discover a security issue, please responsibly disclose it by contacting us at [support@serverless.com](mailto:support@serverless.com). Please do not publicly disclose vulnerabilities until we have addressed them.
+
+For more details, see our [Security Policy](./SECURITY.md).

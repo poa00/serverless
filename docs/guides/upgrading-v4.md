@@ -1,8 +1,18 @@
 <!--
 title: Serverless Framework - Upgrading to v4
-menuText: Upgrading to v4
-menuOrder: 13
-layout: Doc
+description: Learn about the significant updates and changes in Serverless Framework Version 4, including new licensing requirements, authentication methods, and deprecated providers.
+short_title: Upgrading to v4
+keywords:
+  [
+    'Serverless Framework',
+    'Version 4',
+    'upgrade',
+    'AWS',
+    'licensing',
+    'authentication',
+    'TypeScript support',
+    'auto-updating',
+  ]
 -->
 
 <!-- DOCS-SITE-LINK:START automatically generated  -->
@@ -27,7 +37,7 @@ These changes only apply to Serverless Framework V.4 and beyond and not to earli
 
 All questions on pricing can be answered on our [pricing page](https://serverless.com/pricing).
 
-Serverless Framework V.4 will walk you through purchasing a Subscription via our Dashboard if you simply run the `serverless` command. Subscriptions can be purchased via [credit card](https://app.serverless-dev.com/settings/billing) or the [AWS Marketplace](https://aws.amazon.com/marketplace/pp/prodview-ok24yw6x5wcrg).
+Serverless Framework V.4 will walk you through purchasing a Subscription via our Dashboard if you simply run the `serverless` command. Subscriptions can be purchased via [credit card](https://app.serverless.com/settings/billing) or the [AWS Marketplace](https://aws.amazon.com/marketplace/pp/prodview-ok24yw6x5wcrg).
 
 ## Authentication Via Access Or License Keys
 
@@ -51,7 +61,7 @@ Moving forward, we plan to revisit support for other vendors through the introdu
 
 ## Environment Variables Loaded By Default
 
-In previous versions of Serverless Framework (<= V.3), the `useDotEnv` configuration in `serverless.yml` would have to be set in order to load `.env` and `[stage].env` files, and make their environment variables accessible within `serverless.yml`.
+In previous versions of Serverless Framework (<= V.3), the `useDotEnv` configuration in `serverless.yml` would have to be set in order to load `.env` and `.env.[stage]` files, and make their environment variables accessible within `serverless.yml`.
 
 In V.4, these files are read automatically, without the `useDotEnv` property.
 
@@ -82,3 +92,31 @@ Auto-updating has been introduced in Serverless Framework V.4. This is checked o
 Git-related Serverless Framework Variables have been introduced into the Variable system.
 
 As a result, the [Serverless Git Variables Plugin](https://github.com/jacob-meacham/serverless-plugin-git-variables) no longer works.
+
+## Updated stages syntax
+
+In V.4 there is a new global stages syntax that allows you to define parameters for each stage. This is not a breaking change for the previous `stages` syntax; however, the new syntax is recommended.
+
+The old V.3 syntax:
+
+```yaml
+params:
+  default:
+    key1: devValue
+  prod:
+    key1: prodValue
+```
+
+The new V.4 syntax:
+
+```yaml
+stages:
+  default:
+    params:
+      key1: devValue
+  prod:
+    params:
+      key1: prodValue
+```
+
+The functionality is similar, but parameters should be defined under `stages.<stage>.params` instead of just `params.<stage>`.

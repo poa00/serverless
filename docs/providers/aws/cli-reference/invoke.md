@@ -1,9 +1,19 @@
 <!--
 title: Serverless Framework Commands - AWS Lambda - Invoke
-menuText: invoke
-menuOrder: 8
-description: Invoke an AWS Lambda Function using the Serverless Framework
-layout: Doc
+description: Invoke an AWS Lambda Function using the Serverless Framework.
+short_title: Commands - Invoke
+keywords:
+  [
+    'Serverless',
+    'Framework',
+    'AWS',
+    'Lambda',
+    'Invoke',
+    'function invocation',
+    'AWS Lambda function',
+    'event data',
+    'logging',
+  ]
 -->
 
 <!-- DOCS-SITE-LINK:START automatically generated  -->
@@ -27,6 +37,7 @@ serverless invoke [local] --function functionName
 - `--function` or `-f` The name of the function in your service that you want to invoke. **Required**.
 - `--stage` or `-s` The stage in your service you want to invoke your function in.
 - `--region` or `-r` The region in your stage that you want to invoke your function in.
+- `--aws-profile` The AWS profile you want to use.
 - `--qualifier` or `-q` The version number or alias to invoke your function in. Default is `$LATEST`.
 - `--data` or `-d` String data to be passed as an event to your function. By default data is read from standard input.
 - `--raw` Pass data as a raw string even if it is JSON. If not set, JSON data are parsed and passed as an object.

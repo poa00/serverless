@@ -1,9 +1,19 @@
 <!--
 title: Serverless Framework Commands - AWS Lambda - Dev
-menuText: dev
-menuOrder: 9
 description: The dev command enables real-time, local development and testing of AWS Lambda functions without frequent redeployments or the need for emulation.
-layout: Doc
+short_title: Commands - Dev
+keywords:
+  [
+    'Serverless',
+    'Framework',
+    'AWS',
+    'Lambda',
+    'Dev',
+    'Local Development',
+    'Serverless CLI',
+    'AWS Lambda Testing',
+    'AWS IoT Core',
+  ]
 -->
 
 <!-- DOCS-SITE-LINK:START automatically generated  -->
@@ -24,6 +34,7 @@ serverless dev
 
 - `--stage` or `-s` The stage in your service that you want to activate a development session for.
 - `--region` or `-r` The region in that stage that you want to active a development session for.
+- `--aws-profile` The AWS profile you want to use.
 
 **Note:** While it is possible, we do not recommend activating a development session in your `prod` stage.
 
@@ -88,3 +99,7 @@ Maintaining a dedicated local stage is beneficial for quickly activating a devel
 ### Typescript isn't working for me.
 
 Under the hood Serverless uses `ts-node` for invoking your functions locally, and does require a `tsconfig.json` file. Make sure you have a valid config file and try again.
+
+### Lambda functions inside a VPC aren't working for me
+
+The `dev` command does not work out-of-the-box with AWS Lambda functions running inside a VPC. To enable it, you can either temporarily remove the VPC configuration or update your VPC setup to allow connectivity with AWS IoT Core. For detailed instructions, refer to [the official AWS documentation on using AWS IoT Core with interface VPC endpoints](https://docs.aws.amazon.com/vpc/latest/privatelink/create-interface-endpoint.html).

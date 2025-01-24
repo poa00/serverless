@@ -1,28 +1,37 @@
 <!--
-title: Serverless Framework - Composing services
-menuText: Composing services
-menuOrder: 3
-layout: Doc
+title: 'Composing Serverless Framework Services'
+description: 'Learn how to deploy and orchestrate multiple services using Serverless Framework Compose. This guide covers setup, service dependencies, and global commands for efficient management of serverless applications.'
+short_title: Composing Services
+keywords:
+  [
+    'Serverless Framework',
+    'composing services',
+    'multiple services',
+    'service dependencies',
+    'global commands',
+    'serverless-compose',
+  ]
 -->
 
 <!-- DOCS-SITE-LINK:START automatically generated  -->
 
-### [Read this on the main serverless docs site](https://www.serverless.com/framework/docs/guides/compose/)
+### [Read this on the main serverless docs site](https://www.serverless.com/framework/docs/guides/compose)
 
 <!-- DOCS-SITE-LINK:END -->
 
 # Composing Serverless Framework services
 
-Deploying multiple services in a monorepository is a very common pattern across larger teams. Serverless Framework Compose is meant to simplify deploying and orchestrating multiple services:
+Deploying multiple services in a monorepository is a very common pattern across larger teams. Serverless Framework Compose is meant to simplify deploying and orchestrating multiple services. It lets you:
 
 - Deploy multiple services in parallel
 - Deploy services in a specific order
+- Deploy different types of services (ie. Traditional, SAM, or CloudFormation) together.
 - Share outputs from one service to another
 - Run commands across multiple services
 
 ## Setup
 
-_Note: Compose is available in Serverless Framework **v3.15.0** or greater ([Upgrading guide](../getting-started.md#upgrade)). If Serverless Framework is installed locally (in `node_modules/`), make sure to upgrade it as well._
+_Note: Compose, as documented here, is available in Serverless Framework **v4.3.1** or greater ([Upgrading guide](upgrading-v4.md)). Initial version was available in v3.15.0 but that is not covered in these docs._
 
 Assuming you have an application containing multiple Serverless Framework services, for example:
 
@@ -50,8 +59,6 @@ services:
 
   service-b:
     path: service-b
-    # If the file is not named "serverless.yml":
-    # config: serverless.api.yml
 ```
 
 _Note: JS/TS configuration files are also supported (`serverless-compose.{yml,ts,js,json}`)._
@@ -60,30 +67,29 @@ _Note: JS/TS configuration files are also supported (`serverless-compose.{yml,ts
 
 To deploy all services, instead of running `serverless deploy` in each service, you can now deploy all services at once by running `serverless deploy` at the root:
 
-```bash
+```text
 $ serverless deploy
 
-Deploying myapp to stage dev
+Serverless ϟ Compose
 
-    ✔  service-a › deployed › 15s
-    ✔  service-b › deployed › 31s
+Serverless Compose enables you to deploy multiple services in one command, in parallel, or ordered by dependencies.
+Docs: https://www.serverless.com/framework/docs/guides/compose
 
-```
+✔ service-a
+    output1: ...
+    output2: ...
 
-In order to limit the number of services that are deployed concurrently, use `--max-concurrency` flag:
+✔ service-b
+    output1: ...
+    output2: ...
 
-```bash
-$ serverless deploy --max-concurrency 5
+Results: 2 services succeeded, 0 failed, 0 skipped, 2 total    Time: 38s
 ```
 
 ### Service dependencies and variables
 
-Service variables let us:
-
-- order deployments
-- inject outputs from one service into another
-
-This is possible via the `${service.output}` syntax. For example:
+Service variables let us order deployments and inject outputs from one service
+into another. This is possible via the `${service.output}` syntax. For example:
 
 ```yaml
 services:
@@ -118,12 +124,11 @@ Let's break down the example above into 3 steps:
 
 2. Because of the dependency introduced by the variable, `serverless deploy` will automatically **deploy `service-a` first, and then `service-b`.**
 
-3. The value will be passed to `service-b` [as a parameter](./parameters.md) named `queueUrl`. Parameters can be referenced in Serverless Framework configuration via the `${param:xxx}` syntax:
+3. The value will be passed to `service-b` [as a parameter](parameters.md) named `queueUrl`. Parameters can be referenced in Serverless Framework configuration via the `${param:xxx}` syntax:
 
    ```yaml
    # service-b/serverless.yml
    provider:
-     ...
      environment:
        # Here we inject the queue URL as a Lambda environment variable
        SERVICE_A_QUEUE_URL: ${param:queueUrl}
@@ -160,28 +165,10 @@ As seen in the above example, it is possible to configure more than one dependen
 
 On top of `serverless deploy`, the following commands can be run globally across all services:
 
-- `serverless logs` to fetch logs from **all functions across all services**
 - `serverless info` to view all services info
 - `serverless remove` to remove all services
-- `serverless outputs` to view all services outputs
-- `serverless refresh-outputs` to refresh outputs of all services
-
-For example, it is possible to tail logs for all functions at once:
-
-```bash
-$ serverless logs --tail
-
-service-a › users › START
-service-a › users › 2021-12-31 16:54:14  INFO  New user created
-service-a › users › END Duration: 13 ms ...
-service-b › billing › START
-service-b › billing › 2021-12-31 16:54:14  INFO  New subscription enabled
-service-b › billing › END Duration: 7 ms ...
-
-    ⠴  service-a › logs › 2s
-    ⠦  service-a › logs › 2s
-
-```
+- `serverless print` to print all services configuration
+- `serverless package` to package all services
 
 ### Service-specific commands
 
@@ -191,7 +178,7 @@ It is possible to run commands for a specific service only. For example to deplo
 serverless deploy --service=service-a
 
 # Shortcut alternative
-serverless service-a:deploy
+serverless service-a deploy
 ```
 
 Or tail logs of a single function:
@@ -200,47 +187,114 @@ Or tail logs of a single function:
 serverless logs --service=service-a --function=index
 
 # Shortcut alternative
-serverless service-a:logs --function=index
+serverless service-a logs --function=index
 ```
 
 All Serverless Framework commands are supported **only via service-specific commands**, including custom commands from plugins, for example:
 
 ```bash
-serverless service-a:offline
+serverless service-a offline
 ```
 
 ### Service-specific commands when using parameters
 
-The `serverless service-a:deploy` command is the equivalent of running `serverless deploy` in service-a's directory. Both can be used.
+The `serverless service-a deploy` command is the equivalent of running `serverless deploy` in service-a's directory. Both can be used.
 
-However, if "service-a" uses `${param:xxx}` to reference parameters injected by `serverless-compose.yml`, then `serverless service-a:deploy` must be used. Indeed, `${param:xxx}` cannot be resolved outside of Serverless Framework Compose.
+However, if "service-a" uses `${param:xxx}` to reference parameters injected by `serverless-compose.yml`, then `serverless service-a deploy` must be used. Indeed, `${param:xxx}` cannot be resolved outside of Serverless Framework Compose.
 
-In these cases, you must run all commands from the root: `serverless service-a:deploy`.
+In these cases, you must run all commands from the root: `serverless service-a deploy`.
+
+## Shared State
+
+With the introduction of shared [State](./state), collaboration across teams deploying multiple services has been significantly improved.
+In earlier versions of Serverless Framework Compose, local state management was used, which had several limitations,
+especially when multiple people or CI/CD systems deployed services independently.
+
+### Key benefits of shared State:
+
+- **Improved collaboration:** Outputs are always in sync, ensuring that different team members working on different services can collaborate seamlessly. When one person deploys a service, the outputs are immediately available and consistent for everyone else.
+- **No need for output synchronization commands:** Previously, local state required manual commands like `serverless outputs`
+  and `serverless refresh-outputs` to synchronize outputs across services.
+  These commands have been deprecated because the shared State handles this automatically, keeping everything in sync in real time.
+
+### Deprecated local state
+
+The older versions of Compose relied on local state, which has now been deprecated and replaced by shared State.
+This deprecation removes the need for manual refreshes, streamlining the deployment and orchestration
+process across multiple services.
+
+For more information about shared State, please refer to [the State documentation](./state).
 
 ## Configuration
 
-The following variables are supported in `serverless-compose.yml`:
+All Variable Resolvers are supported in `serverless-compose.yml`. For example, you can use SSM Parameters, Secrets Manager, or custom variables.
 
-- [`${sls:stage}`](../providers/aws/guide/variables.md#referencing-serverless-core-variables)
-- [`${env:xxx}`](../providers/aws/guide/variables.md#referencing-environment-variables)
+For more information, see the [Variable Resolvers documentation](variables).
+
+## Stage-specific configuration
+
+You can specify stage-specific configurations using the `stages` block, similar to how it's done in `serverless.yml`. Your composed services can then reference those variables in their `serverless.yml` files using the `${param:<key>}` variable, without needing to explicitly pass them as parameters in `serverless-compose.yml`.
+
+Here’s an example:
+
+```yml
+# serverless-compose.yml
+stages:
+  dev:
+    params:
+      STRIPE_API_KEY: 'stripe-api-dev-key'
+  prod:
+    params:
+      STRIPE_API_KEY: 'stripe-api-prod-key'
+services:
+  service-a:
+    path: service-a
+  service-b:
+    path: service-b
+```
+
+The `STRIPE_API_KEY` param will be resolved based on the stage you're deploying to and will automatically be available for both services to reference in their `serverless.yml` files:
+
+```yml
+# serverless.yml (for both service-a and service-b)
+functions:
+  hello:
+    environment:
+      STRIPE_API_KEY: ${param:STRIPE_API_KEY} # Resolves to "stripe-api-dev-key" in dev and "stripe-api-prod-key" in prod
+```
+
+## Passing params to indvidual services
+
+The `stages` block mentioned earlier makes stage parameters available to all services. However, if you need to pass parameters to individual services that aren't outputs from other services, you can define them directly in the `params` section of the specific service:
+
+```yml
+services:
+  service-a:
+    path: service-a
+    params:
+      user: ${env:USER} # You can also use environment variables here, as shown above.
+      description: 'This is a hard-coded description that you can pass to your service.'
+```
+
+In the serverless.yml file of service-a, you can reference these parameters like this:
+
+```yml
+# service-a/serverless.yml
+functions:
+  hello:
+    environment:
+      USER: ${param:user}
+      DESCRIPTION: ${param:description}
+```
 
 ### Differences with `serverless.yml`
 
 The `serverless-compose.yml` and `serverless.yml` files have different syntaxes and features.
 
-Unless documented here, expect `serverless.yml` features to not be supported in `serverless-compose.yml`. For example, it is not possible to include plugins or use most `serverless.yml` variables (like `${self:`, `${opt:`, etc.) inside `serverless-compose.yml`.
+Unless documented here, expect `serverless.yml` features to not be supported in `serverless-compose.yml`.
+For example, it is not possible to include plugins inside `serverless-compose.yml`.
 
-You can [open feature requests](https://github.com/serverless/compose) if you need features that aren't supported in `serverless-compose.yml`.
-
-## Refreshing outputs
-
-The outputs of a service are stored locally (in the `.serverless/` directory). If a colleague deployed changes that changed the outputs of a service, you can refresh your local state via the `refresh-outputs` command:
-
-```
-serverless refresh-outputs
-```
-
-This command has no impact on deployed services, it can be run at any time without unintended side effects.
+You can [open feature requests](https://github.com/serverless/serverless) if you need features that aren't supported in `serverless-compose.yml`.
 
 ## Removing services
 
@@ -249,7 +303,7 @@ To delete the whole project (and all its services), run `serverless remove` in t
 To delete only one service:
 
 1. make sure no other service depends on it (else these services will be broken)
-2. run `serverless <service-name>:remove`
+2. run `serverless <service-name> remove`
 3. then remove the service from `serverless-compose.yml`
 
 If you remove the service from `serverless-compose.yml` without doing step 1 first, the service will still be deployed in your AWS account.

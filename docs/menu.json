@@ -3,9 +3,10 @@
   "Get Started": {
     "Setup": "getting-started",
     "Upgrading To V4": "guides/upgrading-v4",
-    "Tutorial": "tutorial",
     "Concepts": "providers/aws/guide/intro",
-    "AWS Credentials": "providers/aws/guide/credentials"
+    "Tutorial": "tutorial",
+    "AWS Credentials": "providers/aws/guide/credentials",
+    "License Keys": "guides/license-keys"
   },
   "Usage": {
     "Deploying": "providers/aws/guide/deploying",
@@ -42,10 +43,33 @@
     "Layers": "providers/aws/guide/layers",
     "IAM Function Permissions": "providers/aws/guide/iam",
     "Parameters": "guides/parameters",
-    "Variables": "providers/aws/guide/variables",
+    "Variables": {
+      "Overview": "guides/variables",
+      "Self-reference serverless.yml": "guides/variables/self",
+      "Serverless Core": "guides/variables/core",
+      "Environment Variables": "guides/variables/env-vars",
+      "CLI Options": "guides/variables/cli-options",
+      "External YAML/JSON Files": "guides/variables/file",
+      "Javascript properties": "guides/variables/javascript",
+      "Git": "guides/variables/git",
+      "AWS": {
+        "Overview": "guides/variables/aws",
+        "S3 Objects": "guides/variables/aws/s3",
+        "SSM Parameter Store & Secrets Manager": "guides/variables/aws/ssm",
+        "CloudFormation Stack Outputs": "guides/variables/aws/cf-stack"
+      },
+      "HashiCorp": {
+        "Overview": "guides/variables/hashicorp",
+        "Vault": "guides/variables/hashicorp/vault",
+        "Terraform State Output": "guides/variables/hashicorp/terraform"
+      }
+    },
     "Resources": "providers/aws/guide/resources",
     "Composing Services": "guides/compose",
-    "Workflow Tips": "providers/aws/guide/workflow",
+    "Deployment Bucket": "guides/deployment-bucket",
+    "State": "guides/state",
+    "Deploying SAM/CFN Templates": "guides/sam",
+    "Workflow Tips": "guides/workflow",
     "Plugins": {
       "Overview": "guides/plugins",
       "Creating Plugins": "guides/plugins/creating-plugins",
@@ -54,9 +78,13 @@
       "Custom Variables": "guides/plugins/custom-variables",
       "Extending the Configuration schema": "guides/plugins/custom-configuration",
       "Extending and overriding configuration": "guides/plugins/extending-configuration"
+    },
+    "Observability": {
+      "Overview": "guides/observability",
+      "Dashboard": "guides/observability/dashboard",
+      "Axiom": "guides/observability/axiom"
     }
   },
-  "Examples and Tutorials": "examples-and-tutorials",
   "CLI Reference": {
     "Overview": "providers/aws/cli-reference",
     "package": "providers/aws/cli-reference/package",
@@ -73,11 +101,8 @@
     "rollback": "providers/aws/cli-reference/rollback",
     "rollback function": "providers/aws/cli-reference/rollback-function",
     "remove": "providers/aws/cli-reference/remove",
-    "plugin list": "providers/aws/cli-reference/plugin-list",
-    "plugin search": "providers/aws/cli-reference/plugin-search",
     "plugin install": "providers/aws/cli-reference/plugin-install",
     "plugin uninstall": "providers/aws/cli-reference/plugin-uninstall",
-    "generate event": "providers/aws/cli-reference/generate-event",
     "print": "providers/aws/cli-reference/print",
     "support": "providers/aws/cli-reference/support"
   },
@@ -94,7 +119,6 @@
         "Python": "guides/dashboard/monitoring/sdk/python"
       }
     },
-    "Parameters": "guides/dashboard/parameters",
     "Outputs": "guides/dashboard/output-variables",
     "Providers": "guides/dashboard/providers",
     "CI/CD": {
@@ -114,6 +138,7 @@
   },
   "Serverless.yml Reference": "providers/aws/guide/serverless.yml",
   "Learn More": {
+    "Examples and Tutorials": "examples-and-tutorials",
     "Configuration Validation": "configuration-validation"
   }
 }

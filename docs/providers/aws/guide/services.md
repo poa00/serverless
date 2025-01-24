@@ -1,7 +1,14 @@
 <!--
 title: Serverless Framework Services
+short_title: Serverless Framework Services
 description: How to manage and configure serverless services, which contain your AWS Lambda functions, their events and infrastructure resources.
-layout: Doc
+keywords:
+  [
+    'Serverless Framework',
+    'AWS Lambda',
+    'serverless services',
+    'serverless.yml',
+  ]
 -->
 
 <!-- DOCS-SITE-LINK:START automatically generated  -->
@@ -67,7 +74,7 @@ comments/
 
 This makes sense since related functions usually use common infrastructure resources, and you want to keep those functions and resources together as a single unit of deployment, for better organization and separation of concerns.
 
-To orchestrate and deploy multiple services, check out the ["Composing services" documentation](../../../guides/compose.md).
+To orchestrate and deploy multiple services, check out the ["Composing services" documentation](../../../guides/compose).
 
 ## Contents
 
@@ -87,7 +94,7 @@ Each `service` configuration is managed in the `serverless.yml` file. The main r
 - Define any plugin to use
 - Define a set of AWS resources to create
 - Allow events listed in the `events` section to automatically create the resources required for the event upon deployment
-- Allow flexible configuration using [variables](./variables.md)
+- Allow flexible configuration using [variables](../../../guides/variables/env-vars.md)
 
 You can see the name of the service, the provider configuration and the first function inside the `functions` definition which points to the `handler.js` file. Any further service configuration will be done in this file.
 
@@ -128,6 +135,77 @@ resources:
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
 ```
+
+### Stage-Specific Configuration
+
+You can specify stage-specific configuration in the `stages` section of the `serverless.yml` file. This configuration include parameters, observability settings, and variables resolvers declarations. Here's how that looks like:
+
+#### Setting Parameters
+
+You can set different parameter values for each stage, and use the `default` stage as a fallback for any stage that you did not specify.
+
+```yml
+# serverless.yml
+service: billing
+
+stages:
+  prod:
+    params:
+      stripe_api_key: ${env:PROD_STRIPE_API_KEY}
+  default:
+    params:
+      stripe_api_key: ${env:DEV_STRIPE_API_KEY}
+```
+
+You can then reference these parameters later in your `serverless.yml` file:
+
+```yml
+functions:
+  chargeCustomer:
+    handler: billing.charge
+    environment:
+      STRIPE_API_KEY: ${param:stripe_api_key}
+```
+
+This will use the correct parameter value based on the stage you're currently working on.
+
+For more information please see the [parameters](../../../guides/parameters.md) documentation.
+
+#### Enabling and Disabling Observability
+
+You can also enable or disable the observability feature of the Serverless Dashboard based on the stage you are working on.
+
+```yml
+# serverless.yml
+service: billing
+
+stages:
+  prod:
+    observability: true
+  default:
+    observability: false
+```
+
+The above example will enable observability for the `prod` stage, but disable it by default for all other stages.
+
+For more information please see the [observability](../../../guides/dashboard/README.md) documentation.
+
+#### Declaring Variables Resolvers
+
+Another use case of the stages property is to declare variable resolvers for the `terraform` and `vault` variables. Here's an example that declares the `terraform` variable resolver:
+
+```yml
+stages:
+  default:
+    resolvers:
+      terraform:
+        type: terraform
+        backend: s3
+        bucket: terraform-state
+        key: users-table/terraform.tfstate
+```
+
+For more information please see the [terraform](../../../guides/variables/hashicorp/terraform.md) and the [vault](../../../guides/variables/hashicorp/vault.md) variables documentation.
 
 ## Deployment
 

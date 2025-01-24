@@ -1,7 +1,17 @@
 <!--
 title: Serverless Framework - AWS Lambda Functions
 description: How to configure AWS Lambda functions in the Serverless Framework
-layout: Doc
+short_title: AWS Lambda Functions
+keywords:
+  [
+    'Serverless Framework',
+    'AWS Lambda',
+    'function configuration',
+    'handler',
+    'runtime',
+    'permissions',
+    'environment variables',
+  ]
 -->
 
 <!-- DOCS-SITE-LINK:START automatically generated  -->
@@ -317,10 +327,12 @@ In service configuration, images can be configured via `provider.ecr.images`. To
 Additionally, you can define arguments that will be passed to the `docker build` command via the following properties:
 
 - `buildArgs`: With the `buildArgs` property, you can define arguments that will be passed to `docker build` command with `--build-arg` flag. They might be later referenced via `ARG` within your `Dockerfile`. (See [Documentation](https://docs.docker.com/engine/reference/builder/#arg))
+- `buildOptions`: With the `buildOptions` property, you can define options that will be passed to the `docker build` command. (See [Documentation](https://docs.docker.com/engine/reference/commandline/image_build/#options))
 - `cacheFrom`: The `cacheFrom` property can be used to specify which images to use as a source for layer caching in the `docker build` command with `--cache-from` flag. (See [Documentation](https://docs.docker.com/engine/reference/builder/#usage))
 - `platform`: The `platform` property can be used to specify the architecture target in the `docker build` command with the `--platform` flag. If not specified, Docker will build for your computer's architecture by default. AWS Lambda typically uses `x86` architecture unless otherwise specified in the Lambda's runtime settings. In order to avoid runtime errors when building on an ARM-based machine (e.g. Apple M1 Mac), `linux/amd64` must be used here. The options for this flag are `linux/amd64` (`x86`-based Lambdas), `linux/arm64` (`arm`-based Lambdas), or `windows/amd64`. (See [Documentation](https://docs.docker.com/engine/reference/builder/#from))
+- `provenance`: The `provenance` property can be used to specify the provenance attestations of the image. (See [Documentation](https://docs.docker.com/build/metadata/attestations/slsa-provenance))
 
-When `uri` is defined for an image, `buildArgs`, `cacheFrom`, and `platform` cannot be defined.
+When `uri` is defined for an image, `buildArgs`, `buildOptions`, `cacheFrom`, and `platform` cannot be defined.
 
 Example configuration
 
@@ -587,7 +599,7 @@ functions:
       TABLE_NAME: tableName2
 ```
 
-If you want your function's environment variables to have the same values from your machine's environment variables, please read the documentation about [Referencing Environment Variables](./variables.md).
+If you want your function's environment variables to have the same values from your machine's environment variables, please read the documentation about [Referencing Environment Variables](../../../guides/variables/env-vars.md).
 
 ## Tags
 
@@ -848,9 +860,7 @@ functions:
 
 ## Lambda Hashing Algorithm migration
 
-**Note** Below migration guide is intended to be used if you are already using `v3` version of the Framework and you have `provider.lambdaHashingVersion` property set to `20200924` in your configuration file. If you are still on v2 and want to upgrade to v3, please refer to [V3 Upgrade docs](../../../guides/upgrading-v3.md#lambda-hashing-algorithm).
-
-In `v3`, Lambda version hashes are generated using an improved algorithm that fixes determinism issues. If you are still using the old hashing algorithm, you can follow the guide below to migrate to new default version.
+**Note** Below migration guide is intended to be used if you are using the latest version of the Framework and you still have `provider.lambdaHashingVersion` property set to `20200924` in your configuration file. In the latest version of the framework, Lambda version hashes are generated using an improved algorithm that fixes determinism issues. If you are still using the old hashing algorithm, you can follow the [guide to upgrade to the latest version](../../../guides/upgrading-v4.md).
 
 Please keep in mind that these changes require two deployments with manual configuration adjustment between them. It also creates two additional versions and temporarily overrides descriptions of your functions. Migration will need to be done separately for each of your environments/stages.
 

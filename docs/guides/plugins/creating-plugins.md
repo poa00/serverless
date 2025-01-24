@@ -1,9 +1,8 @@
 <!--
 title: Serverless Framework - Creating plugins
-menuText: Creating plugins
-menuOrder: 1
 description: How to create custom plugins to customize the Serverless Framework
-layout: Doc
+short_title: Serverless Plugins - Creating plugins
+keywords: ['Serverless Framework', 'Plugins', 'Custom Plugins']
 -->
 
 <!-- DOCS-SITE-LINK:START automatically generated  -->
@@ -88,7 +87,7 @@ It is also a good practice to add `serverless` to the `peerDependencies` section
 {
   ...
   "peerDependencies": {
-    "serverless": "^2.60 || 3"
+    "serverless": ">=2.60"
   }
 }
 ```
@@ -150,20 +149,26 @@ The `serverless` parameter provides access to the service configuration at runti
 'use strict'
 
 class MyPlugin {
-  constructor(serverless) {
+  constructor(serverless, options, utils) {
     this.serverless = serverless
+    this.options = options // CLI options
+    this.utils = utils
+
     this.hooks = {
       initialize: () => this.init(),
     }
   }
 
   init() {
-    console.log('Serverless instance: ', this.serverless)
+    // Use this custom logging method instead of console.log
+    // to avoid conflicting with the spinner output
+    this.utils.log('Serverless instance: ', this.serverless)
 
     // `serverless.service` contains the (resolved) serverless.yml config
     const service = this.serverless.service
-    console.log('Provider name: ', service.provider.name)
-    console.log('Functions: ', service.functions)
+
+    this.utils.log('Provider name: ', service.provider.name)
+    this.utils.log('Functions: ', service.functions)
   }
 }
 

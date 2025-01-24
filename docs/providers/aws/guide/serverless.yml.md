@@ -1,9 +1,9 @@
 <!--
 title: Serverless Framework - AWS Lambda Guide - Serverless.yml Reference
-menuText: Serverless.yml
-menuOrder: 16
-description: A list of all available properties on serverless.yml for AWS
-layout: Doc
+short_title: serverless.yml Reference
+description: A list of all available properties on serverless.yml for AWS.
+keywords:
+  ['Serverless Framework', 'AWS Lambda', 'serverless.yml reference', 'AWS']
 -->
 
 <!-- DOCS-SITE-LINK:START automatically generated  -->
@@ -38,6 +38,34 @@ app: my-app
 service: my-service
 ```
 
+### Stages
+
+Use the `stages` property to specify stage-specific configuration, like `params`, and `observability` settings.
+
+#### Parameters
+
+```yml
+# serverless.yml
+service: billing
+
+stages:
+  prod:
+    # Enables observability in the prod stage
+    observability: true
+
+    # Sepcify parameter values to be used in the prod stage
+    params:
+      stripe_api_key: ${env:PROD_STRIPE_API_KEY}
+
+  default:
+    # Disabales observability in all other stages
+    observability: false
+
+    # Sepcify parameter values to be used in all other stages
+    params:
+      stripe_api_key: ${env:DEV_STRIPE_API_KEY}
+```
+
 ### Parameters
 
 Learn more about stage parameters in the [Parameters documentation](../../../guides/parameters.md).
@@ -62,6 +90,8 @@ params:
 # This will change depending on the Stage set.
 foo: ${param:domain}
 ```
+
+**Note:** Specifying parameters under the `stage` property as shown in the previous section is the preferred way of setting parameters in v4 of the Serverless Framework.
 
 ## Provider
 
@@ -90,7 +120,7 @@ provider:
   # CloudFormation tags to apply to the stack. Optional.
   stackTags:
     key: value
-  # Method used for CloudFormation deployments: 'changesets' or 'direct'. Optional. (default: changesets)
+  # Method used for CloudFormation deployments: 'changesets' or 'direct'. Optional. (default: direct)
   # See https://www.serverless.com/framework/docs/providers/aws/guide/deploying#deployment-method
   deploymentMethod: direct
   # List of existing Amazon SNS topics in the same region where notifications about stack events are sent. Optional.
@@ -102,6 +132,8 @@ provider:
       ParameterValue: 'Value'
   # Disable automatic rollback by CloudFormation on failure. To be used for non-production environments. Optional.
   disableRollback: true
+  # Resolver name to use for providing AWS credentials for deployment. Optional.
+  resolver: aws-account-1
   # AWS Cloudformation Rollback configuration. Optional.
   rollbackConfiguration:
     MonitoringTimeInMinutes: 20
@@ -419,6 +451,15 @@ provider:
         file: Dockerfile.dev
         buildArgs:
           STAGE: ${sls:stage}
+        buildOptions:
+          [
+            '--tag',
+            'v1.0.0',
+            '--add-host',
+            'example.com:0.0.0.0',
+            '--ssh',
+            'default=/path/to/private/key/id_rsa',
+          ]
         cacheFrom:
           - my-image:latest
 ```
@@ -586,8 +627,8 @@ provider:
       # Log full requests/responses for execution logging (default: true)
       fullExecutionData: true
 
-    # Optional, whether to write CloudWatch logs for custom resource lambdas as added by the framework
-    frameworkLambda: true
+    # Optional, whether to write CloudWatch logs for custom resource lambdas as added by the framework. Default is true.
+    frameworkLambda: false
 ```
 
 ### S3 buckets
